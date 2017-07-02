@@ -10,6 +10,8 @@ from threading import Thread
 from random import randint
 
 from os import environ
+import sys
+
 class Saida:
 	def __init__(self):
 		self.string=""
@@ -67,83 +69,19 @@ class SendEmail(Thread):
 
 
 
-def readInformation(generator):
+def readInformation(key):
 	try:
 		alogin=open(environ['HOME']+"/.emailInformation","r")
 		email=alogin.readline()[:-1]
 		pwd=alogin.readline()[:-1]
 		to=alogin.readline()[:-1]
 		alogin.close()
-		sender=SendEmail(email,pwd,"Login Key",to,generator.expectedKey)
+		sender=SendEmail(email,pwd,"Login Key",to,key)
 		sender.start()
 		return True
 	except:
-		print "Poker face"
+		print("Poker face")
 		return False
 
-
-class GenerateKey(Thread):
-	def __init__(self,time):
-		Thread.__init__(self)
-		self.end=False
-		self.time=time
-		self.expectedKey=""
-	def run(self):
-		while(not self.end):
-			self.expectedKey=""
-			#for i in range(6):
-			self.expectedKey=self.expectedKey+str(randint(100000,999999))
-			readInformation(self)
-			for i in range(self.time):
-				sleep(1)
-				if(self.end):
-					return None
-
-
-def sair(retorno, generator):
-	generator.end=True
-	exit(retorno)
-
-def erro(generator):
-	print "Erro inesperado"
-	sair(1,generator)
-
-def handler(generator):
-	try:
-		asw=raw_input('\nVocê quer realmente sair?[S/n] ')
-		if(asw=='S' or asw=='s'): sair(1,generator)
-	except KeyboardInterrupt:
-		return 0
-	except Exception as e:
-		print e.message
-		erro(generator)
-
-ok=False
-tempo = 60
-#while(not ok):
-#	tempo=raw_input("Quanto tempo deseja que sua chave seja válida (em segundos)? ")
-#	try:
-#		int(tempo)
-#		ok=True
-#	except:
-#		print "Tem certeza que digitou um número? "
-
-generator=GenerateKey(int(tempo))
-generator.start()
-print("Sua chave será enviada em instantes para o email cadastrado")
-sleep(1)
-
-while(True):
-	try:
-		key=raw_input("Digite a chave: ")
-		if(key==generator.expectedKey):
-			print "Logado com sucesso!"
-			sair(0,generator)
-		else:
-			print "Chave incorreta!"
-	except KeyboardInterrupt:
-		while (handler(generator)==0):
-			pass
-	except Exception as e:
-		print e.message
-		erro(generator)
+readInformation(sys.argv[1])
+print(sys.argv[1])
