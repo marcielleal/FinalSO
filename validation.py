@@ -12,12 +12,6 @@ from random import randint
 from os import environ
 import sys
 
-class Saida:
-	def __init__(self):
-		self.string=""
-		self.newKey=0
-
-saida=Saida()
 sended="Not send"
 
 class SendEmail(Thread):
@@ -30,8 +24,7 @@ class SendEmail(Thread):
 		self.texto=texto
 
 	def run(self):
-		global sended
-		global saida		
+		global sended		
 		local=self.email.find("@")
 		if(local==-1): 
 			sended="Email inválido"+self.email+ " "+self.assunto+ " "+ self.to+ " "+self.texto
@@ -61,8 +54,6 @@ class SendEmail(Thread):
 			mail["Subject"] = self.assunto
 			gmh.sendmail(self.email,self.to,mail.as_string())
 			gmh.close()
-			#saida.newKey+=1
-			#saida.string="Nova chave enviada para o email "+self.to[0:5]+"*******"+self.to[self.to.find("@"):]
 			sended="Enviado"
 		except Exception as err:
 			sended=err.__str__()+self.email+ " "+self.senha+ " "+self.assunto+ " "+ self.to+ " "+self.texto
