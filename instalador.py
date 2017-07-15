@@ -16,8 +16,8 @@ fi
 bash.close()
 
 a=open(environ['HOME']+"/.emailInformation","w")
-a.write("marcielmanoel15@gmail.com\n")
-a.write("13467800hp\n")
+a.write("email\n")
+a.write("senha\n")
 to=raw_input("Digite o email para receber suas chaves")
 a.write(to+"\n")
 a.close()
